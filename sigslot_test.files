@@ -1,0 +1,14 @@
+main.cpp
+server.h
+sigslot.h
+widget.cpp
+widget.h
+main.cpp
+Makefile
+server.cpp
+eventloop.h
+eventloop.cpp
+eventobject.h
+eventobject.cpp
+simpleclient.h
+simpleclient.cpp

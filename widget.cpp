@@ -1,18 +1,28 @@
 #include <stdio.h>
 #include "widget.h"
 
-Widget::Widget(int id) :
-    id(id)
+Widget::Widget(int id, EventLoop *loop) :
+    EventObject(loop),
+    _server(loop),
+    _id(id)
 {
-    // Nothing to do
+    this->_server.NewConnection.connect(this, &Widget::NewClient);
+    this->_server.listen(4321);
 }
 
-void Widget::slot(void)
+Widget::~Widget()
 {
-    printf("Widget %d's slot invoked\n", this->id);
+    std::list<SimpleClient*>::iterator it;
+    for (it = this->_clients.begin(); it != this->_clients.end(); ++it) {
+        delete *it;
+    }
 }
 
-void Widget::onUpdated(void)
+void Widget::NewClient()
 {
-    this->Updated();
+    int fd = this->_server.accept();
+    if (fd > 0) {
+        SimpleClient *client = new SimpleClient(fd, this->loop);
+        this->_clients.push_back(client);
+    }
 }

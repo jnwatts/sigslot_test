@@ -1,15 +1,12 @@
 #include <stdio.h>
+#include "eventloop.h"
+#include "server.h"
 #include "widget.h"
 
 int main()
 {
-    Widget w0(0);
-    Widget w1(1);
+    EventLoop eventLoop;
+    Widget w(0, &eventLoop);
 
-    w0.Updated.connect(&w1, &Widget::slot);
-    w0.Updated.connect(&w0, &Widget::slot);
-
-    w0.onUpdated();
-    printf("Returning\n");
-    return 0;
+    return eventLoop.exec();
 }

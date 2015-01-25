@@ -1,20 +1,23 @@
 #ifndef WIDGET_H__
 #define WIDGET_H__
 
+#include "eventobject.h"
 #include "sigslot.h"
+#include "server.h"
+#include "simpleclient.h"
 
-class Widget : public sigslot::has_slots<>
+class Widget : public sigslot::has_slots<>, public EventObject
 {
 public:
-    Widget(int id);
+    Widget(int _id, EventLoop *loop = 0);
+    ~Widget(void);
 
-    sigslot::signal0<> Updated;
-
-    void slot(void);
-    void onUpdated(void);
+    void NewClient(void);
 
 private:
-    int id;
+    Server _server;
+    std::list<SimpleClient*> _clients;
+    int _id;
 };
 
 #endif
